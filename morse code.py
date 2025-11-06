@@ -43,15 +43,16 @@ morse_code_dict = {
 def encode_to_morse(text):
     """Encode text to morse code."""
     encoded_message = ""
+    text = input("Enter text to encode to morse code: ")
     for char in text.upper():
-        if char in morse_code_dict.keys():
-            encoded_message +=(morse_code_dict[char])
-            encoded_message +=(" ")
-        elif char == " ":
-            encoded_message+=("   ")
+        if char == " ":
+            encoded_message += " "
+        elif char in morse_code_dict:
+            encoded_message += morse_code_dict[char] + " "
     return encoded_message
     
 def lookup_key_by_value(value):
+    """Helper function to lookup dictionary key by its value."""
     for key, val in morse_code_dict.items():
         if val == value:
             return key
@@ -60,21 +61,21 @@ def lookup_key_by_value(value):
 def decode_from_morse(morse_code):
     """Decode morse code to text."""
     decoded_message = ""
-    for code in morse_code.split(" "):
-        if code == "":
-            decoded_message += " "
-        else:
-            decoded_message += lookup_key_by_value(code)
-    return decoded_message
-    #accepting something like ".... . .-.. .-.. ---    .-- --- .-. .-.. -.."
-    #split that input on the space
-    #split takes a string and converts it to an array based on a separator. 
-    #eg "hello world".split(" ") would be ["hello", "world"]
+    morse_code = input("Enter morse code to decode: ")
+    morse_words = morse_code.split("   ")
+    for morse_word in morse_words:
+        morse_chars = morse_word.split(" ")
+        for morse_char in morse_chars:
+            decoded_message += lookup_key_by_value(morse_char)
+        decoded_message += " "
+    return decoded_message.strip()
+
 
 if __name__ == "__main__":
-    text = "HELLO WORLD"
-    morse_code = encode_to_morse(text)
-    print(f"Encoded: {morse_code}")
-
-    decoded_text = decode_from_morse(morse_code)
-    print(f"Decoded: {decoded_text}")
+    choice = input("Type 'e' to encode or 'd' to decode: ").lower()
+    if choice == 'e':
+        print("Encoded Morse Code:", encode_to_morse(""))
+    elif choice == 'd':
+        print("Decoded Text:", decode_from_morse(""))
+    else:
+        print("Invalid, type 'e' or 'd'.")
